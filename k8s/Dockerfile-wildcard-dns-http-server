@@ -39,7 +39,7 @@
 
 FROM golang as builder
 WORKDIR /app
-COPY ../src/wildcard-dns-http-server ./
+COPY src/wildcard-dns-http-server ./
 RUN GOOS=linux GOARCH=amd64 go build -o ./wildcard-dns-http-server
 
 FROM alpine AS sslip.io
