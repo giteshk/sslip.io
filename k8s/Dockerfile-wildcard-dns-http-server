@@ -37,11 +37,16 @@
 #    dig +short txt any-domain-you-want @localhost
 #      "new-TXT-record"
 
+FROM golang as builder
+WORKDIR /app
+COPY ../src/wildcard-dns-http-server ./
+RUN GOOS=linux GOARCH=amd64 go build -o ./wildcard-dns-http-server
+
 FROM alpine AS sslip.io
 
 LABEL maintainer="brian.cunnie@gmail.com"
 
-COPY wildcard-dns-http-server /usr/sbin/wildcard-dns-http-server
+COPY --from=builder /app/wildcard-dns-http-server /usr/sbin/wildcard-dns-http-server
 
 ENTRYPOINT ["/usr/sbin/wildcard-dns-http-server"]
 
